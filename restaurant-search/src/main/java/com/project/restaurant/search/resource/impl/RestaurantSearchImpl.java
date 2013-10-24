@@ -30,9 +30,9 @@ public class RestaurantSearchImpl implements IRestaurantSearch {
 	}
 
 	@Override
-	public RestaurantList getRestaurants(String cuisine, String longitude,
-			String latitude) {
-		// TODO Auto-generated method stub
+	public RestaurantList getRestaurants(String cuisine, String latitude,
+			String longitude) {
+		restaurantFinder.getRestaurantsByLatLng(latitude, longitude);
 		return null;
 	}
 

@@ -7,5 +7,9 @@ public interface IRestaurantFinder {
 	public RestaurantList getRestaurants(
 			final String cuisine, 
 			final String location);
+	
+	public RestaurantList getRestaurantsByLatLng(
+			final String latitude,
+			final String longitude);
 
 }

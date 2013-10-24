@@ -33,9 +33,9 @@ public interface IRestaurantSearch {
 	@Path("/restaurants/current_location")
 	@Produces(MediaType.APPLICATION_JSON)
 	public RestaurantList getRestaurants(
-			final String cuisine, 
-			final String longitude, 
-			final String latitude);
+			@QueryParam("cuisine") final String cuisine, 
+			@QueryParam("latitude") final String latitude, 
+			@QueryParam("longitude") final String longitude);
 	
 	
 
