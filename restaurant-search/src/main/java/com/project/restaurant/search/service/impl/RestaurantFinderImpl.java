@@ -1,10 +1,12 @@
 package com.project.restaurant.search.service.impl;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.project.restaurant.search.client.model.RestaurantList;
 import com.project.restaurant.search.google.client.IGoogleClient;
+import com.project.restaurant.search.resource.impl.RestaurantSearchImpl;
 import com.project.restaurant.search.service.IRestaurantFinder;
 import com.project.restaurant.search.testdata.TestData;
 
@@ -15,7 +17,7 @@ public class RestaurantFinderImpl implements IRestaurantFinder {
 	private TestData testData;
 	@Autowired
 	private IGoogleClient googleClient;
-
+	private final static Logger LOGGER = Logger.getLogger(RestaurantFinderImpl.class);
 	@Override
 	public RestaurantList getRestaurants(String cuisine, String location) {
 		return this.testData.getRestaurantList();
@@ -25,7 +27,8 @@ public class RestaurantFinderImpl implements IRestaurantFinder {
 	public RestaurantList getRestaurantsByLatLng(
 			final String latitude,
 			final String longitude) {
-		googleClient.getZipcode(latitude, longitude);
+		String zipCode = googleClient.getZipcode(latitude, longitude);
+		LOGGER.info(zipCode);
 		return null;
 	}
 

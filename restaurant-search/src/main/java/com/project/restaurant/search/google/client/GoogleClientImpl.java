@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.project.restaurant.search.resource.impl.RestaurantSearchImpl;
+import com.project.restaurant.util.JsonUtility;
 
 @Component
 public class GoogleClientImpl implements IGoogleClient {
@@ -37,8 +38,7 @@ public class GoogleClientImpl implements IGoogleClient {
 				gooleBaseUrl + "?latlng={latlng}&sensor={sensor}", 
 				String.class,
 				paramMap);
-		LOGGER.info(response);
-		return null;
+		return JsonUtility.getZipcode(response);
 	}
 
 }
