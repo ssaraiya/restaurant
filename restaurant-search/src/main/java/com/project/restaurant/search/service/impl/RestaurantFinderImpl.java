@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.project.restaurant.search.client.model.RestaurantList;
 import com.project.restaurant.search.google.client.IGoogleClient;
-import com.project.restaurant.search.resource.impl.RestaurantSearchImpl;
 import com.project.restaurant.search.service.IRestaurantFinder;
 import com.project.restaurant.search.testdata.TestData;
 
@@ -20,16 +19,17 @@ public class RestaurantFinderImpl implements IRestaurantFinder {
 	private final static Logger LOGGER = Logger.getLogger(RestaurantFinderImpl.class);
 	@Override
 	public RestaurantList getRestaurants(String cuisine, String location) {
-		return this.testData.getRestaurantList();
+		return this.testData.getRestaurantList(cuisine, location);
 	}
 
 	@Override
 	public RestaurantList getRestaurantsByLatLng(
+			final String cuisine,
 			final String latitude,
 			final String longitude) {
 		String zipCode = googleClient.getZipcode(latitude, longitude);
 		LOGGER.info(zipCode);
-		return null;
+		return testData.getRestaurantList(cuisine, zipCode);
 	}
 
 }

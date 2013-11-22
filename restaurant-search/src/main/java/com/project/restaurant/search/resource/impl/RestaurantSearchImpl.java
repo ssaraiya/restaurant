@@ -32,8 +32,7 @@ public class RestaurantSearchImpl implements IRestaurantSearch {
 	@Override
 	public RestaurantList getRestaurants(String cuisine, String latitude,
 			String longitude) {
-		restaurantFinder.getRestaurantsByLatLng(latitude, longitude);
-		return null;
+		return restaurantFinder.getRestaurantsByLatLng(cuisine, latitude, longitude);
 	}
 
 }
