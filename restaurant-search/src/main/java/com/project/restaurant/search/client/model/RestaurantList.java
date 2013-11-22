@@ -1,10 +1,11 @@
 package com.project.restaurant.search.client.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantList extends BaseList {
 
-	private List<Restaurant> restaurantList;
+	private List<Restaurant> restaurantList = new ArrayList<Restaurant>();
 
 	public List<Restaurant> getRestaurantList() {
 		return restaurantList;

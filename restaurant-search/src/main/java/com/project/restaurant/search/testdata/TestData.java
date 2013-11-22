@@ -4,19 +4,21 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.project.restaurant.search.client.model.Restaurant;
 import com.project.restaurant.search.client.model.RestaurantList;
 
 @Component
 public class TestData {
-	
+
 	private Map<String, List<Restaurant>> restaurantMap;
-	
+
 	public TestData() {
 		this.restaurantMap = generateTestData();
 	}
@@ -36,7 +38,7 @@ public class TestData {
 		r1.setName("Sangam");
 		r1.setState("Gujarat");
 		r1.setZipcode("380009");
-		
+
 		Restaurant r2 = new Restaurant();
 		r2.setAddress("123 XYZ");
 		r2.setCity("Ahmedabad");
@@ -50,7 +52,7 @@ public class TestData {
 		r2.setName("Sangam");
 		r2.setState("Gujarat");
 		r2.setZipcode("380009");
-		
+
 		Restaurant r3 = new Restaurant();
 		r3.setAddress("123 XYZ");
 		r3.setCity("Ahmedabad");
@@ -64,7 +66,7 @@ public class TestData {
 		r3.setName("Sangam");
 		r3.setState("Gujarat");
 		r3.setZipcode("380009");
-		
+
 		Restaurant r4 = new Restaurant();
 		r4.setAddress("123 XYZ");
 		r4.setCity("Ahmedabad");
@@ -77,26 +79,81 @@ public class TestData {
 		r4.setCuisine("Indian");
 		r4.setName("Sangam");
 		r4.setState("Gujarat");
-		r4.setZipcode("380009");	
-		
-		restaurantMap.put("380009",Lists.newArrayList(r1, r2, r3, r4));
+		r4.setZipcode("380009");
+
+		restaurantMap.put("380009", Lists.newArrayList(r1, r2, r3, r4));
 		return restaurantMap;
 
 	}
 
-	public RestaurantList getRestaurantList(String cuisine, String zipcode) {
+	public RestaurantList getRestaurantList(String cuisine, String location) {
 		
-		if (StringUtils.isBlank(zipcode)) {
-			return null;
+		RestaurantList rList = new RestaurantList();
+		if (StringUtils.isBlank(location)) {
+			return rList;
+		}
+
+		Map<String, List<Restaurant>> cuisineMap = Maps.newHashMap();
+		for (Entry<String, List<Restaurant>> entry : this.restaurantMap
+				.entrySet()) {
+			List<Restaurant> restaurantList = entry.getValue();
+			for (Restaurant restaurant : restaurantList) {
+				if (restaurant.getState().equalsIgnoreCase(location)
+						|| restaurant.getCity().equalsIgnoreCase(location)
+						|| restaurant.getZipcode().equals(location)
+						|| restaurant.getAddress().contains(location)) {
+					if (cuisineMap.get(restaurant.getCuisine().toLowerCase()) == null) {
+						List<Restaurant> resList = Lists.newArrayList();
+						resList.add(restaurant);
+						cuisineMap.put(restaurant.getCuisine().toLowerCase(), resList);
+					} else {
+						cuisineMap.get(restaurant.getCuisine().toLowerCase()).add(restaurant);
+					}
+				}
+			}
 		}
 		
-		List<Restaurant> listRestaurant =  restaurantMap.get(zipcode);
+		if (StringUtils.isBlank(cuisine)) {
+			List<List<Restaurant>> listResList = Lists.newArrayList(cuisineMap.values());
+			List<Restaurant> resList = Lists.newArrayList();
+			for (List<Restaurant> list : listResList) {
+				resList.addAll(list);
+			}
+			
+			if(resList == null) {
+				return rList;
+			}
+			
+			rList.setRestaurantList(resList);
+			return rList;
+		}
+
+		if (cuisineMap == null || cuisineMap.isEmpty() || cuisineMap.get(cuisine.toLowerCase()) == null) {
+			return rList;
+		}
+
+		rList.setRestaurantList(cuisineMap.get(cuisine.toLowerCase()));
+		return rList;
+
+	}
+
+	public RestaurantList getRestaurantListByZipcode(String cuisine,
+			String zipcode) {
 		RestaurantList rList = new RestaurantList();
+		if (StringUtils.isBlank(zipcode)) {
+			return rList;
+		}
+
+		List<Restaurant> listRestaurant = restaurantMap.get(zipcode);
+		if (listRestaurant == null || listRestaurant.isEmpty()) {
+			return rList;
+		}
+		
 		if (StringUtils.isBlank(cuisine)) {
 			rList.setRestaurantList(listRestaurant);
 			return rList;
 		}
-		
+
 		List<Restaurant> cuisineRList = Lists.newArrayList();
 		for (Restaurant restaurant : listRestaurant) {
 			if (cuisine.equalsIgnoreCase(restaurant.getCuisine())) {
@@ -104,9 +161,13 @@ public class TestData {
 			}
 		}
 		
+		if(cuisineRList == null) {
+			return rList;
+		}
+
 		rList.setRestaurantList(cuisineRList);
 		return rList;
-		
+
 	}
-	
+
 }

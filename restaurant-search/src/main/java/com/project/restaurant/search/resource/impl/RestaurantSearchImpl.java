@@ -25,7 +25,6 @@ public class RestaurantSearchImpl implements IRestaurantSearch {
 		LOGGER.info("Calling logger");
 		RestaurantList restaurantList = restaurantFinder.getRestaurants(
 				cuisine, location);
-		restaurantList.setStart(0);
 		return restaurantList;
 	}
 

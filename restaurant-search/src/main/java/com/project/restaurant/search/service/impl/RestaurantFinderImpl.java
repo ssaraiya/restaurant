@@ -29,7 +29,7 @@ public class RestaurantFinderImpl implements IRestaurantFinder {
 			final String longitude) {
 		String zipCode = googleClient.getZipcode(latitude, longitude);
 		LOGGER.info(zipCode);
-		return testData.getRestaurantList(cuisine, zipCode);
+		return testData.getRestaurantListByZipcode(cuisine, zipCode);
 	}
 
 }
